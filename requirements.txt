@@ -1,6 +1,6 @@
-Pillow
-tk
-opencv-python
-torch 
-torchvision 
-torchaudio
+Pillow==9.3.0
+tk==0.1.0
+opencv-python==4.6.0.66
+torch==1.13.0
+torchaudio==0.13.0
+torchvision==0.14.0
