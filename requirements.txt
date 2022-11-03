@@ -1,3 +1,6 @@
 Pillow
 tk
 opencv-python
+torch 
+torchvision 
+torchaudio

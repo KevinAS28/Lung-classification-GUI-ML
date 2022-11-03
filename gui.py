@@ -1,7 +1,6 @@
 # import the necessary packages
-from timeit import timeit
 from tkinter import *
-from tkinter import ttk
+import ml1
 from PIL import Image
 from PIL import ImageTk
 from tkinter import filedialog
@@ -14,23 +13,30 @@ panelB = None
 initiated = False
 loading_label: Label = None
 result_label: Label = None
+title_label: Label = None
+conf_label: Label = None
+clf_label: Label = None
 bg_color = '#EBEBEB'
 title_size = 75
 
+model = ml1.load_model()
+
 def process_show(path_input):
 	global loading_label
+	print('loading...')	
 	image = cv2.imread(path_input)
-	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)	
-	output = cv2.Canny(gray, 50, 100)
-	cv2.imwrite('output_0.png', output)
-
-	print('loading...')
+	# gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)	
+	# output = cv2.Canny(gray, 50, 100)
 	start_time = time.time()
-	time.sleep(3)
+	cv2.imwrite('output_0.png', image)
+	result = confs, conf, pred = ml1.inference(model, path_input)
+	# time.sleep(3)
 	end_time = time.time()
 
+	clf_label.configure({'text': " "*(9-len(pred))+pred})
+	conf_label.configure({'text': round(conf, 4)})
 	loading_label.configure({'text': f'{round(end_time-start_time, 4)} seconds'})
-	result_label.configure({'text': f'Result: Image after canny'})
+	result_label.configure({'text': f'Prediction with ResNet18'})
 	show_images(path_input, 'output_0.png')
 	
 
@@ -92,7 +98,7 @@ if __name__=="__main__":
 
 	canvas=Canvas(window, width=1166, height=718)
 	canvas.pack()
-	canvas.create_line(583,450,583,0, fill="black", width=3)	
+	canvas.create_line(583,500,583,100, fill="black", width=3)	
 	# canvas.create_line(0,550,1166,550, fill="black", width=3)	
 
 	show_images('input.png', 'output.png')
@@ -145,13 +151,13 @@ if __name__=="__main__":
 								font=("yu gothic ui", 17, "bold"), justify="center")
 	loading_label.place(x=160, y=title_size+480)
 
-	clf_label = Label(text="Lung Cancer 3", bg=bg_color, fg="black",
+	clf_label = Label(text="no image", bg=bg_color, fg="black",
 								font=("yu gothic ui", 17, "bold"), justify="center")
-	clf_label.place(x=170+50+300, y=title_size+480)
+	clf_label.place(x=170+50+300+25	, y=title_size+480)
 
 	conf_label = Label(text="96.0007%", bg=bg_color, fg="black",
 								font=("yu gothic ui", 17, "bold"), justify="center")
-	conf_label.place(x=170+50+300+50+300+25, y=title_size+480)
+	conf_label.place(x=170+50+300+50+300+25+10, y=title_size+480)
 
 	# time_card.place(x=int(718/2 - 50)+100+(718/2)+50, y=title_size+600)
 	# while True:
