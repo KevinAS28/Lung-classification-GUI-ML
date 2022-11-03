@@ -15,7 +15,7 @@ test_transform = torchvision.transforms.Compose([
 def load_model():
     resnet18 = torchvision.models.resnet18(pretrained=True)
     resnet18.fc = torch.nn.Linear(in_features=512, out_features=4)
-    resnet18.load_state_dict(torch.load('checkpoint_Resnet18_ES_crossval4.pt'))
+    resnet18.load_state_dict(torch.load('checkpoint_Resnet18_ES_crossval4.pt', map_location=torch.device('cpu')))
     resnet18.eval()
     # resnet18.cuda()
     model = resnet18
